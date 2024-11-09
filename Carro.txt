@@ -1,0 +1,57 @@
+import numpy as np
+from sklearn.metrics import pairwise_distances
+import pandas as pd
+
+# Base de Dados de Carros
+carros = pd.DataFrame({
+    'Carro': ['Chevrolet Tracker', 'Chevrolet Onix Plus', 'Honda Civic', 'Toyota Corolla', 'Jeep Renegade',
+              'Ford Ka', 'Hyundai Creta'],
+    'Espaço': [8, 6, 7, 7, 9, 5, 8],
+    'Economia': [6, 9, 7, 8, 5, 8, 6],
+    'Potência': [7, 5, 8, 7, 9, 6, 7],
+    'Conforto': [7, 6, 8, 8, 9, 5, 7]
+})
+
+# Função para calcular a distância euclidiana
+def recomendar_carro(carros, caracteristicas_usuario):
+    distancias = pairwise_distances([caracteristicas_usuario], carros[['Espaço', 'Economia', 'Potência', 'Conforto']])
+    carro_recomendado = carros.iloc[np.argmin(distancias)]
+    return carro_recomendado
+
+# Testes: Lista de carros esperados e características do usuário
+testes = [
+    {'carro_esperado': 'Jeep Renegade', 'caracteristicas_usuario': [9, 5, 9, 9]},
+    {'carro_esperado': 'Chevrolet Onix Plus', 'caracteristicas_usuario': [6, 9, 5, 6]},
+    {'carro_esperado': 'Honda Civic', 'caracteristicas_usuario': [7, 7, 8, 8]},
+    {'carro_esperado': 'Ford Ka', 'caracteristicas_usuario': [5, 8, 6, 5]},
+    {'carro_esperado': 'Chevrolet Tracker', 'caracteristicas_usuario': [8, 6, 7, 7]},
+    {'carro_esperado': 'Jeep Renegade', 'caracteristicas_usuario': [9, 5, 9, 9]},
+    {'carro_esperado': 'Toyota Corolla', 'caracteristicas_usuario': [7, 8, 7, 8]},
+    {'carro_esperado': 'Hyundai Creta', 'caracteristicas_usuario': [8, 6, 7, 7]},
+    {'carro_esperado': 'Chevrolet Onix Plus', 'caracteristicas_usuario': [6, 9, 5, 6]},
+    {'carro_esperado': 'Ford Ka', 'caracteristicas_usuario': [5, 8, 6, 5]}
+]
+
+# Variáveis para cálculo de precisão
+total_tests = len(testes)
+correct_predictions = 0
+
+# Executar os testes
+for i, teste in enumerate(testes):
+    carro_esperado = teste['carro_esperado']
+    caracteristicas_usuario = teste['caracteristicas_usuario']
+    
+    carro_recomendado = recomendar_carro(carros, caracteristicas_usuario)
+    
+    # Verificar se a recomendação está correta
+    if carro_recomendado['Carro'] == carro_esperado:
+        correct_predictions += 1
+        correto = True
+    else:
+        correto = False
+    
+    print(f"Teste {i + 1}: Esperado = {carro_esperado}, Recomendado = {carro_recomendado['Carro']}, Correto = {correto}")
+
+# Calcular a precisão
+precisao_media = (correct_predictions / total_tests) * 100
+print(f"\nPrecisão Média do Modelo: {precisao_media:.2f}%")
