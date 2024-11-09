@@ -1,4 +1,10 @@
 // Classe PerceptronCarro para recomendação de carros com base em características
+
+/* O Perceptron é um modelo básico de rede neural utilizado para tarefas
+ de classificação binária. Ele foi proposto por Frank Rosenblatt em 1958
+  e é considerado um dos primeiros algoritmos de aprendizado de máquina.
+ */
+
 public class PerceptronCarro {
 
     // Pesos sinápticos para cada característica (inicializados com valores aleatórios)
